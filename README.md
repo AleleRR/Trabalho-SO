@@ -10,6 +10,7 @@ Trabalho final da disciplina **11781 – Sistemas Operacionais** (Unoesc). O gru
 | --- | --- |
 | [03-Artigo-Gerencia-de-Memoria-Virtual.md](03-Artigo-Gerencia-de-Memoria-Virtual.md) | Artigo (leitura no navegador): conceitos do Cap. 10 e comparativo com tecnologias atuais |
 | [03-Artigo-Gerencia-de-Memoria-Virtual.pdf](03-Artigo-Gerencia-de-Memoria-Virtual.pdf) | O mesmo artigo em PDF (19 páginas) |
+| [04-Guia-de-Leitura-do-Artigo.md](04-Guia-de-Leitura-do-Artigo.md) | Explicação em linguagem simples dos trechos difíceis do artigo, com glossário |
 | [02-Conteudo-da-Apresentacao.md](02-Conteudo-da-Apresentacao.md) | Roteiro da apresentação: 28 slides em 3 blocos, fala de cada slide, exemplos resolvidos e perguntas para a arguição |
 | [01-Conteudo-Isolado/](01-Conteudo-Isolado/) | Capítulo 10 recortado do livro (PDF e texto puro) |
 | [Trabalho-Final-SO.pdf](Trabalho-Final-SO.pdf) | Enunciado do trabalho e critérios de avaliação |
