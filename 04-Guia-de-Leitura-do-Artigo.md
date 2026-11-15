@@ -123,13 +123,36 @@ O processador alterna entre vários programas muitas vezes por segundo; essa alt
 
 **Contíguas** quer dizer lado a lado, em sequência. Com a memória virtual, o programa pode ficar espalhado em pedaços pela RAM, e mesmo assim enxerga sua memória como uma sequência contínua.
 
-> Tabela: 2³² endereços · blocos de 4 K · 2²⁰ entradas
+> Tabela: Espaço virtual · Tamanho do bloco · Número de blocos (entradas na tabela)
 
-- **2³² endereços** são cerca de 4,3 bilhões de posições, ou seja, 4 GB.
-- **Bloco de 4 K** tem 4.096 posições.
-- 2³² ÷ 2¹² = 2²⁰, cerca de **1 milhão de linhas** no índice.
+Esta é a Tabela 10.1 do livro, que também aparece no slide 8 da apresentação. Ela mostra **quantas linhas a tabela de mapeamento precisa ter**, conforme o tamanho da memória virtual e o tamanho do bloco.
 
-A ideia da tabela: quanto maior o bloco, menos linhas o índice precisa ter.
+**As três colunas e suas unidades:**
+
+1. **Espaço virtual:** quantos endereços o processo pode usar.
+    - **Unidade:** endereços. Nos computadores atuais, cada endereço aponta para 1 byte, então dá para ler também como bytes.
+    - **De onde vem o 2³²:** é a quantidade de endereços possíveis com 32 bits. Cada bit tem 2 valores (0 ou 1), então 32 bits dão 2 × 2 × … × 2, 32 vezes. 2³² = 4.294.967.296 endereços, cerca de **4 GB**. Com 64 bits, 2⁶⁴ são cerca de 18,4 quintilhões de endereços.
+2. **Bloco:** o tamanho de cada pedaço (página) em que o espaço é dividido.
+    - **Unidade:** também endereços. O livro escreve "512 endereços", "4 K endereços" e "64 K endereços"; no slide, a palavra "endereços" ficou de fora.
+    - **O "K" vale 1.024 (2¹⁰), não 1.000:** 512 = 2⁹ endereços (512 bytes); 4 K = 4 × 1.024 = 4.096 = 2¹² endereços (**4 KB**); 64 K = 64 × 1.024 = 65.536 = 2¹⁶ endereços (**64 KB**).
+3. **Número de entradas:** quantas linhas a tabela de mapeamento precisa ter.
+    - **Unidade:** entradas, ou seja, linhas da tabela. É uma contagem, não um tamanho de memória.
+    - **Por que é esse número:** cada bloco precisa de uma linha na tabela. Então o número de entradas é o número de blocos: **espaço virtual ÷ tamanho do bloco**. No livro são duas colunas separadas ("número de blocos" e "número de entradas"), sempre com o mesmo valor; no slide virou uma só.
+
+**A conta, linha por linha.** Para dividir potências de 2, basta subtrair os expoentes.
+
+| Espaço virtual | Bloco | Conta | Nº de entradas | Por extenso |
+| --- | --- | --- | --- | --- |
+| 2³² endereços (4 GB) | 512 = 2⁹ | 2³² ÷ 2⁹ = 2³²⁻⁹ | **2²³** | 8.388.608 linhas |
+| 2³² endereços (4 GB) | 4 K = 2¹² | 2³² ÷ 2¹² = 2³²⁻¹² | **2²⁰** | 1.048.576 linhas (≈ 1 milhão) |
+| 2⁶⁴ endereços | 4 K = 2¹² | 2⁶⁴ ÷ 2¹² = 2⁶⁴⁻¹² | **2⁵²** | ≈ 4,5 quatrilhões de linhas |
+| 2⁶⁴ endereços | 64 K = 2¹⁶ | 2⁶⁴ ÷ 2¹⁶ = 2⁶⁴⁻¹⁶ | **2⁴⁸** | ≈ 281 trilhões de linhas |
+
+**O que a tabela quer mostrar:**
+
+- **Bloco maior, tabela menor:** com o mesmo espaço de 2³², trocar blocos de 512 por blocos de 4 K reduz a tabela de 8,4 milhões para 1 milhão de linhas.
+- **Por que isso pesa:** cada linha ocupa memória. No exemplo do livro, são 4 bytes por linha, então 2²⁰ linhas × 4 bytes = **4 MB por processo** (seção 5.2 do artigo).
+- **Em 64 bits, mesmo blocos grandes não bastam:** 2⁴⁸ linhas é impossível de guardar numa tabela única. Por isso surgem as tabelas em múltiplos níveis (seções 5.2 e 9.1 do artigo).
 
 ### 3 Memória virtual por paginação
 
@@ -225,6 +248,19 @@ Se um programa causa *page faults* demais, ganha mais espaço; se causa poucos, 
 | NRU | Usa um sinal "usada recentemente? sim ou não", zerado de tempos em tempos. |
 | FIFO com *buffer* | A página que sai vai para uma "sala de espera" e pode voltar sem ir ao disco. |
 | FIFO circular (*clock*) | Um ponteiro de relógio passa pelas páginas; quem foi usada ganha uma **segunda chance**. |
+
+**O que significa cada sigla** (tabela do slide 16 da apresentação). Os nomes vêm do inglês. "Ótimo" e "Aleatório" não são siglas.
+
+| Sigla ou nome | Em inglês | Tradução | O que quer dizer |
+| --- | --- | --- | --- |
+| FIFO | *First-In, First-Out* | Primeiro a entrar, primeiro a sair | Sai a página que está há mais tempo na memória, como numa fila |
+| LFU | *Least Frequently Used* | Usada com menos frequência | Sai a página com menos acessos no total; cada página tem um contador |
+| LRU | *Least Recently Used* | Usada há mais tempo | Sai a página cujo último uso foi há mais tempo |
+| NRU | *Not Recently Used* | Não usada recentemente | Sai uma página que não foi usada há pouco (bit de referência = 0) |
+| *Buffer* | *buffer* | Área de espera, armazenamento temporário | Lista onde a página retirada aguarda antes de ser reaproveitada; se for pedida de novo, volta sem ir ao disco |
+| *Clock* | *clock* | Relógio | As páginas ficam em círculo e um ponteiro gira por elas como o de um relógio; também se chama FIFO circular ou algoritmo da "segunda chance" |
+
+**Cuidado para não confundir LFU com LRU:** o LFU olha **quantas vezes** a página foi usada; o LRU olha **quando** ela foi usada pela última vez. Uma página muito usada no início do programa e esquecida depois continua na memória pelo LFU, porque o contador dela é alto. Pelo LRU, ela sai, porque está há muito tempo sem uso.
 
 > BR = 0 e BM = 0 […] Mach
 

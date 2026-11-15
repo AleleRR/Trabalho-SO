@@ -19,6 +19,9 @@ Trabalho final da disciplina **11781 – Sistemas Operacionais** (Unoesc). O gru
 
 ## Apresentação
 
+- [Versão 1, estática](https://claude.ai/artifact/B6pjC7HAZ5AGpRhipb76hK): 28 slides, com a animação final automática.
+- [Versão 2, com animações](https://claude.ai/artifact/NErLfjUH37Gsk4SEQpBMhV): os mesmos 28 slides, mais 10 slides de animação que avançam no clique (38 no total).
+- Os links abrem no claude.ai e só funcionam para quem recebeu acesso pelo botão Compartilhar da apresentação.
 - Máximo de 30 minutos, com 3 apresentadores sorteados na hora. **Todos precisam estudar os 3 blocos.**
 - Entregar o PDF por e-mail ao professor **antes** de começar a apresentação.
 - Confirmar a data com o professor: o enunciado cita 25/11/2026 e 26/11/2026.
